@@ -33,7 +33,7 @@ kind: Service
 metadata:
   name: pizzafrontend-svc
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: pizzafrontend
   ports:
