@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizzafrontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pizzafrontend
+  template:
+    metadata:
+      labels:
+        app: pizzafrontend
+    spec:
+      containers:
+      - name: pizzafrontend
+        image: kostaskps/pizzafrontend:v1.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_URLS
+          value: http://*:80
+        - name: backendURL
+          value: http://pizzabackend-svc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pizzafrontend-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: pizzafrontend
+  ports:
+  - port: 80
+    nodePort: 32000
+#    targetPort: <Target Port>
